@@ -25,7 +25,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Dump environment variables
-      run: ls env:
+      run: "ls env:"
     - name: Dump selected variables
       run: |
         echo "GitHub SHA: $GITHUB_SHA"
