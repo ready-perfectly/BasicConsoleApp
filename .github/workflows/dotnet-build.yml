@@ -28,9 +28,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Dump environment variables
-      run: "ls env:"
-    - name: Dump host
-      run: Get-Host
+      run: set
     - name: Dump selected variables
       run: |
         echo "GitHub SHA: $GITHUB_SHA"
@@ -45,7 +43,7 @@ jobs:
     - name: Chdir Workspace
       run: Set-Location ${{ github.workspace }}
     - name: List files
-      run: ls
+      run: dir /s
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
