@@ -34,6 +34,8 @@ jobs:
         echo "GitHub Workspace3: $env:GITHUB_WORKSPACE"
         echo "GitHub Workspace4: $($env:GITHUB_WORKSPACE)"
         echo "GitHub Workspace5: ${{ github.workspace }}"
+        echo "GitHub Workspace6: ${{ inputs.working_directory }}"
+        
     - name: List files
       run: ls
     - name: Restore dependencies
