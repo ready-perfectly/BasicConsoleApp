@@ -40,8 +40,6 @@ jobs:
         echo "GitHub Workspace6: ${{ inputs.working_directory }}"
         whoami
         
-    - name: Chdir Workspace
-      run: Set-Location ${{ github.workspace }}
     - name: List files
       run: dir /s
     - name: Restore dependencies
