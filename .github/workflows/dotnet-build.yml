@@ -24,8 +24,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Display Github context
-      run: echo "$GITHUB_CONTEXT"
+    - name: Dump environment variables
+      run: ls env:
     - name: Dump selected variables
       run: |
         echo "GitHub SHA: $GITHUB_SHA"
