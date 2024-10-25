@@ -39,6 +39,7 @@ jobs:
         echo "GitHub Workspace4: $($env:GITHUB_WORKSPACE)"
         echo "GitHub Workspace5: ${{ github.workspace }}"
         echo "GitHub Workspace6: ${{ inputs.working_directory }}"
+        whoami
         
     - name: Chdir Workspace
       run: Set-Location ${{ github.workspace }}
