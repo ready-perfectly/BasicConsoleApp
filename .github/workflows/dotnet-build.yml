@@ -23,6 +23,11 @@ jobs:
         dotnet-version: 8.0.x
     - name: Display Github context
       run: echo "$GITHUB_CONTEXT"
+    - name: Dump selected variables
+      run: |
+        echo "GitHub SHA: $GITHUB_SHA"
+        echo "GitHub Workspace1: ${GITHUB_WORKSPACE}"
+        echo "GitHub Workspace1: $GITHUB_WORKSPACE"
     - name: List files
       run: ls
     - name: Restore dependencies
