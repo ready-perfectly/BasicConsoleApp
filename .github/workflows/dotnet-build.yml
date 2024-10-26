@@ -40,7 +40,9 @@ on:
         default: "Release"
         
 env:
-  MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || github.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
+  MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
+  BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
+  DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
   
 jobs:
   "build":
@@ -59,6 +61,18 @@ jobs:
     - name: Print inputs is null
       run: echo "Yeah inputs is null"
       if: inputs == null
+      
+    - name: Print if DEBUG_WORKFLOW 
+      run: echo "Yeah DEBUG_WORKFLOW is true"
+      if: ${{ env.DEBUG_WORKFLOW }}
+      
+    - name: Print if NOT DEBUG_WORKFLOW
+      run: echo "Yeah DEBUG_WORKFLOW is FALSE"
+      if: ${{ !env.DEBUG_WORKFLOW }}
+      
+    - name: Print if DEBUG_WORKFLOW
+      run: echo "Yeah DEBUG_WORKFLOW is true 2"
+      if: env.DEBUG_WORKFLOW
       
     - name: Print inputs is NOT null (before)
       run: |
