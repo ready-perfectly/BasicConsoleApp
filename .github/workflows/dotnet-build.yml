@@ -54,6 +54,14 @@ jobs:
     steps:
     - name: Print GITHUB_EVENT_NAME
       run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END"
+
+    - name: Print config vars
+      run: |
+        echo "SAMPLE_ORG_VARIABLE1  : ${{ vars.SAMPLE_ORG_VARIABLE1 }}"
+        echo "SAMPLE_REPO_VARIABLE1 : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
+        echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 }}"
+        echo "SAMPLE_ORG_SECRET1    : ${{ vars.SAMPLE_ORG_SECRET1 }}"
+      
     - name: Print GITHUB_EVENT_NAME
       run: echo "OKOK"
       if: github.event_name == 'workflow_dispatch'
