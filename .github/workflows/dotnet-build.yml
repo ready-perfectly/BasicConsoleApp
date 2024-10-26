@@ -43,6 +43,7 @@ env:
   MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
   BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
   DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
+  ARTIFACT_ARCHIVE_NAME: "ConsoleApp-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
   
 jobs:
   "build":
@@ -92,7 +93,13 @@ jobs:
     - name: Archive
       run: |
         dir
-        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./ConsoleApp-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip" -Force
+        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
+    - name: Upload dotnet test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
+        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
+    
     - name: Post-build
       run: |
         set
