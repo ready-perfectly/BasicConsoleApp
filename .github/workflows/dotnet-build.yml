@@ -98,9 +98,9 @@ jobs:
 #        dir
 #        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
 #        echo ARTIFACT_ARCHIVE_NAME: [${{ env.ARTIFACT_ARCHIVE_NAME }}]
-    - name: Upload dotnet test results
+    - name: Archive published artifacts
       env:
-        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}"
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
