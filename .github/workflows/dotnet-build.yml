@@ -105,7 +105,7 @@ jobs:
 #        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
 #        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
     
-    - name: Post-build
+    - name: Post-job
       run: |
         set
         dir
@@ -125,4 +125,8 @@ jobs:
         env:
           OUTPUT1: ${{needs.Build.outputs.ARTIFACT_ARCHIVE_NAME}}
         run: |
-          echo do something: $OUTPUT1"
+          echo do something: ${{ env.OUTPUT1 }}"
+      - name: Post-job
+        run: |
+          set
+          dir
