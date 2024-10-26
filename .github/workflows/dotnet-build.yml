@@ -44,17 +44,17 @@ env:
   BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
   DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
   ARTIFACT_NAME: "ConsoleApp"
-  
+  ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
   
 jobs:
-  "build":
+  Build:
     runs-on: [self-hosted, Windows, minikube, powerShellCore]
-    
+    outputs:
+      ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
     defaults:
       run:
         shell: cmd
         working-directory: ${{ github.workspace }}
-
 
     steps:
     - name: Print job environment variables
@@ -110,3 +110,18 @@ jobs:
       run: |
         set
         dir
+
+
+
+  Job2:
+    runs-on: [self-hosted, Windows, minikube, powerShellCore]
+    
+    defaults:
+      run:
+        shell: cmd
+        working-directory: ${{ github.workspace }}
+    
+    steps:
+      - name: Do something
+        run: |
+          echo do something: ${{needs.Build.outputs.ARTIFACT_ARCHIVE_NAME}}"
