@@ -48,8 +48,7 @@ env:
 jobs:
   Build:
     runs-on: [self-hosted, Windows, minikube, powerShellCore]
-    outputs:
-      ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+
     defaults:
       run:
         shell: cmd
@@ -98,35 +97,17 @@ jobs:
       run: |
         dir
         pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
-#    - name: Upload dotnet test results
-#      uses: actions/upload-artifact@v4
-#      with:
-#        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
-#        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
-#        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
-    
+        echo ARTIFACT_ARCHIVE_NAME: [${{ env.ARTIFACT_ARCHIVE_NAME }}]
+    - name: Upload dotnet test results
+      env:
+        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
+        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
     - name: Post-job
       run: |
         set
         dir
 
 
-
-  Job2:
-    runs-on: [self-hosted, Windows, minikube, powerShellCore]
-    
-    defaults:
-      run:
-        shell: cmd
-        working-directory: ${{ github.workspace }}
-    
-    steps:
-      - name: Do something
-        env:
-          OUTPUT1: ${{needs.Build.outputs.ARTIFACT_ARCHIVE_NAME}}
-        run: |
-          echo do something: ${{ env.OUTPUT1 }}"
-      - name: Post-job
-        run: |
-          set
-          dir
