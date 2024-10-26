@@ -86,7 +86,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore --artifacts-path ./artifacts
     - name: Build
-      run: dotnet build --nologo --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} -p:AssemblyVersion=${{ env.BUILD_VERSION }} --artifacts-path ./artifacts
+      run: dotnet build --nologo --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} -p:AssemblyVersion=${{ env.BUILD_VERSION }} -p:Version=${{ env.BUILD_VERSION }} --artifacts-path ./artifacts
     - name: Test
       run: dotnet test --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts 
     - name: Publish
