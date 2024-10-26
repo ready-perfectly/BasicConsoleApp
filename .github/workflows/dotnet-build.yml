@@ -38,77 +38,61 @@ on:
         required: false
         type: string
         default: "Release"
-        
-env:
-  ARTIFACT_NAME: "BasicConsoleApp"
-  BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
-  BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
-  DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
-  
-jobs:
-  Build:
-    runs-on: [self-hosted, Windows, minikube, powerShellCore]
 
+jobs:
+  "build":
+    runs-on: [self-hosted, Windows, minikube]
+    
     defaults:
       run:
         shell: cmd
         working-directory: ${{ github.workspace }}
 
     steps:
-    - name: Print job environment variables
-      run: |
-        echo BUILD_VERSION     : ${{ env.BUILD_VERSION }}
-        echo BUILD_CONFIGURATION  : ${{ env.BUILD_CONFIGURATION }}
-        echo DEBUG_WORKFLOW       : ${{ env.DEBUG_WORKFLOW }}
-        echo ARTIFACT_NAME        : ${{ env.ARTIFACT_NAME }}
-        
-    - name: Print debug information (DEBUG_WORKFLOW is ${{ env.DEBUG_WORKFLOW }}) 
-      if: env.DEBUG_WORKFLOW == true
-      run: |
-        echo GITHUB_EVENT_NAME      : ${{ github.event_name }}
-        set
-        dir
-      
-    - name: Print configuration variables (DEBUG_WORKFLOW is ${{ env.DEBUG_WORKFLOW }})
-      if: env.DEBUG_WORKFLOW == true
-      run: |
-        echo SAMPLE_ORG_VARIABLE1   : ${{ vars.SAMPLE_ORG_VARIABLE1 }}
-        echo SAMPLE_REPO_VARIABLE1  : ${{ vars.SAMPLE_REPO_VARIABLE1 }}
-        echo SAMPLE_REPO_SECRET1    : ${{ secrets.SAMPLE_REPO_SECRET1 }}
-        echo SAMPLE_ORG_SECRET1     : ${{ secrets.SAMPLE_ORG_SECRET1 }}
-        echo SAMPLE_ORG_SECRET2     : ${{ secrets.SAMPLE_ORG_SECRET2 }}
-
+    - name: Print GITHUB_EVENT_NAME
+      run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END"
+    - name: Print GITHUB_EVENT_NAME
+      run: echo "OKOK"
+      if: github.GITHUB_EVENT_NAME == 'workflow_dispatch'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x      
-    - name: Restore dependencies
-      run: dotnet restore --artifacts-path ./artifacts
-    - name: Build
-      run: dotnet build --nologo --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} -p:AssemblyVersion=${{ env.BUILD_VERSION }} -p:Version=${{ env.BUILD_VERSION }} --artifacts-path ./artifacts
-    - name: Test
-      run: dotnet test --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts 
-    - name: Publish
-      run: dotnet publish --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts
-#    - name: Archive
-#      env:
-#        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_VERSION }}.zip"
-#      run: |
-#        dir
-#        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
-#        echo ARTIFACT_ARCHIVE_NAME: [${{ env.ARTIFACT_ARCHIVE_NAME }}]
-    - name: Archive published artifacts
+        dotnet-version: 8.0.x
+    - name: Output Run ID
+      run: echo ${{ github.run_id }}
+    - name: Output Run Number
+      run: echo ${{ github.run_number }}
+    - name: Output Run Attempt
+      run: echo ${{ github.run_attempt }}
+    - name: "Add version info to json file"
       env:
-        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_VERSION }}"
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
-        path: "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}"
-        
-    - name: Post-job
+        BUILD_VERSION: ${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
       run: |
-        set
-        dir
+        echo "version: ${{ env.BUILD_VERSION }}"
 
-
+    - name: Print inputs
+      run: echo "debug_workflow is ${{ inputs.DEBUG_WORKFLOW }} or ${{ inputs.debug_workflow }} END"
+    - name: Output Inputs
+      run: echo "${{ toJSON(github.event.inputs) }}"
+    - name: Dump selected variables
+      run: |
+        echo "GitHub SHA: $GITHUB_SHA"
+        echo "GitHub Workspace1: ${GITHUB_WORKSPACE}"
+        echo "GitHub Workspace2: $GITHUB_WORKSPACE"
+        echo "GitHub Workspace3: $env:GITHUB_WORKSPACE"
+        echo "GitHub Workspace4: $($env:GITHUB_WORKSPACE)"
+        echo "GitHub Workspace5: ${{ github.workspace }}"
+        echo "GitHub Workspace6: ${{ inputs.working_directory }}"
+        whoami
+        
+    - name: Dump environment variables
+      run: set
+    - name: List files
+      run: dir
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
