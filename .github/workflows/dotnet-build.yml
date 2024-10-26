@@ -92,7 +92,7 @@ jobs:
       
     - name: Archive
       run: |
-        ls -l
+        dir
         pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./ConsoleApp-${{ env.MY_BUILD_VERSION }}-${{ env.BUILD_CONFIGURATION }}.zip"
     - name: Post-build
       run: |
