@@ -70,11 +70,6 @@ jobs:
         echo "BUILD_CONFIGURATION : ${{ inputs.BUILD_CONFIGURATION }}"
       if: inputs != null
 
-    - name: Set inputs
-      run:
-        ${{ inputs.BUILD_CONFIGURATION = "ads" }}
-      if: inputs != null
-
     - name: Print config vars
       run: |
         echo "SAMPLE_ORG_VARIABLE1  : ${{ vars.SAMPLE_ORG_VARIABLE1 }}"
