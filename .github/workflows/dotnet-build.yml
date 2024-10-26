@@ -56,7 +56,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
     env:
-      ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+      ARTIFACT_ARCHIVE_NAME: "${{ ARTIFACT_NAME }}-${{ BUILD_CONFIGURATION }}-${{ MY_BUILD_VERSION }}.zip"
       
     steps:
     - name: Print job environment variables
