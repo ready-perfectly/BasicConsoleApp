@@ -91,20 +91,21 @@ jobs:
       run: dotnet test --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts 
     - name: Publish
       run: dotnet publish --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts
-    - name: Archive
-      env:
-        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
-      run: |
-        dir
-        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
-        echo ARTIFACT_ARCHIVE_NAME: [${{ env.ARTIFACT_ARCHIVE_NAME }}]
+#    - name: Archive
+#      env:
+#        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+#      run: |
+#        dir
+#        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
+#        echo ARTIFACT_ARCHIVE_NAME: [${{ env.ARTIFACT_ARCHIVE_NAME }}]
     - name: Upload dotnet test results
       env:
         ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
-        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
+        path: "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}"
+        
     - name: Post-job
       run: |
         set
