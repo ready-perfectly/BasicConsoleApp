@@ -68,13 +68,14 @@ jobs:
         echo "SAMPLE_REPO_VARIABLE1 : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
         echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 }}"
       
-    - name: Print config vars
+    - name: Print configuration variables
       run: |
-        echo "SAMPLE_ORG_VARIABLE1  : ${{ vars.SAMPLE_ORG_VARIABLE1 }}"
-        echo "SAMPLE_REPO_VARIABLE1 : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
-        echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 == null }}"
-        echo "SAMPLE_ORG_SECRET1    : ${{ vars.SAMPLE_ORG_SECRET1 == null }}"
-        echo "SAMPLE_ORG_SECRET2    : ${{ vars.SAMPLE_ORG_SECRET2 == null }}"
+        echo SAMPLE_ORG_VARIABLE1   : ${{ vars.SAMPLE_ORG_VARIABLE1 }}"
+        echo SAMPLE_REPO_VARIABLE1  : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
+        echo SAMPLE_REPO_SECRET1    : ${{ secrets.SAMPLE_REPO_SECRET1 }}"
+        echo SAMPLE_REPO_SECRET1    : ${{ secrets.SAMPLE_REPO_SECRET1 == null }}"
+        echo SAMPLE_ORG_SECRET1     : ${{ secrets.SAMPLE_ORG_SECRET1 == null }}"
+        echo SAMPLE_ORG_SECRET2     : ${{ secrets.SAMPLE_ORG_SECRET2 == null }}"
       
     - uses: actions/checkout@v4
     - name: Setup .NET
