@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Print GITHUB_EVENT_NAME
-      run: echo "GITHUB_EVENT_NAME is ${{ github.GITHUB_EVENT_NAME }}"
+      run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END"
     - name: Print GITHUB_EVENT_NAME
       run: echo "OKOK"
       if: github.GITHUB_EVENT_NAME == 'workflow_dispatch'
@@ -70,8 +70,7 @@ jobs:
         BUILD_VERSION: ${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
       run: |
         echo "version: ${{ env.BUILD_VERSION }}"
-    - name: Dump environment variables
-      run: set
+
     - name: Print inputs
       run: echo "debug_workflow is ${{ inputs.DEBUG_WORKFLOW }} or ${{ inputs.debug_workflow }} END"
     - name: Output Inputs
@@ -87,8 +86,10 @@ jobs:
         echo "GitHub Workspace6: ${{ inputs.working_directory }}"
         whoami
         
+    - name: Dump environment variables
+      run: set
     - name: List files
-      run: dir /s
+      run: dir
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
