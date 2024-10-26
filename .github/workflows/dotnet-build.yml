@@ -64,6 +64,8 @@ jobs:
       if: env.DEBUG_WORKFLOW == true
       run: |
         echo GITHUB_EVENT_NAME      : ${{ github.event_name }}
+        set
+        dir
       
     - name: Print configuration variables (DEBUG_WORKFLOW is ${{ env.DEBUG_WORKFLOW }})
       if: env.DEBUG_WORKFLOW == true
@@ -78,26 +80,14 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-
-    - name: Dump selected variables
-      run: |
-        echo "GitHub SHA: $GITHUB_SHA"
-        echo "GitHub Workspace1: ${GITHUB_WORKSPACE}"
-        echo "GitHub Workspace2: $GITHUB_WORKSPACE"
-        echo "GitHub Workspace3: $env:GITHUB_WORKSPACE"
-        echo "GitHub Workspace4: $($env:GITHUB_WORKSPACE)"
-        echo "GitHub Workspace5: ${{ github.workspace }}"
-        echo "GitHub Workspace6: ${{ inputs.working_directory }}"
-        whoami
-        
-    - name: Dump environment variables
-      run: set
-    - name: List files
-      run: dir
+        dotnet-version: 8.0.x      
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} --nologo
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --nologo --verbosity normal
+    - name: Post-build
+      run: |
+        set
+        dir
