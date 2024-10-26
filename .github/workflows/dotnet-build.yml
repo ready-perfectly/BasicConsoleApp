@@ -6,7 +6,16 @@
 
 name: Build Basic Console App (.NET)
 
-on: workflow_dispatch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      myInput:
+        description: "My test input value"
+        default: "my input value"
 
 jobs:
   "build":
@@ -26,6 +35,8 @@ jobs:
       run: set
     - name: Print inputs
       run: echo "debug_workflow is ${{ inputs.debug_workflow }}"
+    - name: Output Inputs
+      run: echo "${{ toJSON(github.event.inputs) }}"
     - name: Dump selected variables
       run: |
         echo "GitHub SHA: $GITHUB_SHA"
