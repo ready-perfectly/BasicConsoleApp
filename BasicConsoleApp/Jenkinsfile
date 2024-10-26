@@ -1,0 +1,85 @@
+// 
+// Uses .NET SDK Support plugin ( see: https://www.jenkins.io/doc/pipeline/steps/dotnet-sdk/ )
+pipeline {
+
+    agent any
+
+    stages {
+        stage('Clean') {
+            steps {
+                dotnetClean(configuration: 'Release', nologo: true)
+                println "ZDEBUG: ${env.JOB_NAME}"
+                bat 'set'
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                dotnetRestore()
+            }
+        }
+
+        stage('Build') {
+            parallel {
+                stage('Build debug') {
+                    steps {
+                        dotnetBuild(project: 'BasicConsoleApp', configuration: 'Debug', noRestore: true, nologo: true, optionsString: "-p:AssemblyVersion=0.0.0.${BUILD_NUMBER} -nowarn:DV2001")
+                    }
+                }
+                stage('Build release') {
+                    steps {
+                        dotnetBuild(project: 'BasicConsoleApp', configuration: 'Release', noRestore: true, nologo: true, optionsString: "-p:AssemblyVersion=0.0.0.${BUILD_NUMBER} -nowarn:DV2001")
+                    }
+                }
+            }
+
+        }
+
+        stage('Test') {
+            steps {
+                dotnetTest(configuration: 'Release', noBuild: true, noRestore: true, nologo: true)
+                //bat 'dir'
+            }
+        }
+
+        //stage('Deployment check') {
+        //    steps {
+        //        input "Deploy to Minikube?"
+        //    }
+        //}
+
+        stage('Deploy') {
+            steps {
+                // Deployment logic goes here (e.g., pushing to a cloud provider)
+                
+                echo 'Deploying application...'
+//                 pwsh '''
+// minikube status
+// $nextContainerImageName = "redis-console-app:0.0.0.$env:BUILD_NUMBER"
+// Write-Host $nextContainerImageName
+
+// Push-Location
+// Set-Location .\\MySolution.BasicConsoleJob\\
+
+// minikube image build . -t $nextContainerImageName -f .\\Dockerfile
+// kubectl set image cronjob/test-job test-job=docker.io/library/$nextContainerImageName
+
+// Pop-Location
+// '''
+                echo 'Deploying application done'
+            }
+        }
+    }
+
+    post {
+        always {
+            bat 'dir BasicConsoleApp /s'
+            archiveArtifacts artifacts:'BasicConsoleApp/bin/Release/net8.0/** , BasicConsoleApp/bin/Debug/net8.0/**'
+            archiveArtifacts artifacts:'BasicConsoleApp/bin/Release/net8.0/**'
+            echo 'Pipeline completed.'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
