@@ -46,7 +46,7 @@ env:
   
 jobs:
   "build":
-    runs-on: [self-hosted, Windows, minikube]
+    runs-on: [self-hosted, Windows, minikube, powerShellCore]
     
     defaults:
       run:
@@ -89,11 +89,10 @@ jobs:
       run: dotnet test --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts 
     - name: Publish
       run: dotnet publish --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts
-      
     - name: Archive
       run: |
         dir
-        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./ConsoleApp-${{ env.MY_BUILD_VERSION }}-${{ env.BUILD_CONFIGURATION }}.zip"
+        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./ConsoleApp-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip" -Force
     - name: Post-build
       run: |
         set
