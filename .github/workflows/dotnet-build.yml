@@ -40,7 +40,7 @@ on:
         default: "Release"
         
 env:
-  MY_BUILD_VERSION: ${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || github.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
   
 jobs:
   "build":
@@ -51,16 +51,28 @@ jobs:
         shell: cmd
         working-directory: ${{ github.workspace }}
 
+
     steps:
     - name: Print GITHUB_EVENT_NAME
-      run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END"
+      run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END -- ${{ env.MY_BUILD_VERSION }}"
       
     - name: Print inputs is null
       run: echo "Yeah inputs is null"
       if: inputs == null
       
-    - name: Print inputs is NOT null
-      run: echo "Yeah inputs is NOT null"
+    - name: Print inputs is NOT null (before)
+      run: |
+        echo "Yeah inputs is NOT null"
+        echo "DEBUG_WORKFLOW      : ${{ inputs.DEBUG_WORKFLOW }}"
+        echo "VERSION_MAJOR       : ${{ inputs.VERSION_MAJOR }}"
+        echo "VERSION_MINOR       : ${{ inputs.VERSION_MINOR }}"
+        echo "VERSION_BUILD       : ${{ inputs.VERSION_BUILD }}"
+        echo "BUILD_CONFIGURATION : ${{ inputs.BUILD_CONFIGURATION }}"
+      if: inputs != null
+
+    - name: Set inputs
+      run:
+        ${{ inputs.BUILD_CONFIGURATION = "ads" }}
       if: inputs != null
 
     - name: Print config vars
