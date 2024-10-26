@@ -40,10 +40,10 @@ on:
         default: "Release"
         
 env:
-  MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
+  ARTIFACT_NAME: "BasicConsoleApp"
+  BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
   BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
   DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
-  ARTIFACT_NAME: "ConsoleApp"
   
 jobs:
   Build:
@@ -57,7 +57,7 @@ jobs:
     steps:
     - name: Print job environment variables
       run: |
-        echo MY_BUILD_VERSION     : ${{ env.MY_BUILD_VERSION }}
+        echo BUILD_VERSION     : ${{ env.BUILD_VERSION }}
         echo BUILD_CONFIGURATION  : ${{ env.BUILD_CONFIGURATION }}
         echo DEBUG_WORKFLOW       : ${{ env.DEBUG_WORKFLOW }}
         echo ARTIFACT_NAME        : ${{ env.ARTIFACT_NAME }}
@@ -86,21 +86,21 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore --artifacts-path ./artifacts
     - name: Build
-      run: dotnet build --nologo --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} -p:AssemblyVersion=${{ env.MY_BUILD_VERSION }} --artifacts-path ./artifacts
+      run: dotnet build --nologo --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} -p:AssemblyVersion=${{ env.BUILD_VERSION }} --artifacts-path ./artifacts
     - name: Test
       run: dotnet test --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts 
     - name: Publish
       run: dotnet publish --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts
 #    - name: Archive
 #      env:
-#        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+#        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_VERSION }}.zip"
 #      run: |
 #        dir
 #        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
 #        echo ARTIFACT_ARCHIVE_NAME: [${{ env.ARTIFACT_ARCHIVE_NAME }}]
     - name: Archive published artifacts
       env:
-        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}"
+        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.BUILD_VERSION }}"
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
