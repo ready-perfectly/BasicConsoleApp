@@ -44,7 +44,6 @@ env:
   BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
   DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
   ARTIFACT_NAME: "ConsoleApp"
-  ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
   
 jobs:
   Build:
