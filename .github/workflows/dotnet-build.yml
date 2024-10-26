@@ -43,7 +43,7 @@ env:
   MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
   BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
   DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
-  ARTIFACT_ARCHIVE_NAME: "ConsoleApp-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+  ARTIFACT_ARCHIVE_NAME: "ConsoleApp-${{ BUILD_CONFIGURATION }}-${{ MY_BUILD_VERSION }}.zip"
   
 jobs:
   "build":
