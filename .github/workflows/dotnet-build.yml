@@ -6,16 +6,8 @@
 
 name: Build Basic Console App (.NET)
 
-on:
-  workflow_dispatch:
-    inputs:
-      debug_workflow:
-        description: 'Print out more information for debugging'
-        type: boolean
-        required: true
-        default: false
+on: workflow_dispatch
 
-    
 jobs:
   "build":
     runs-on: [self-hosted, Windows, minikube]
