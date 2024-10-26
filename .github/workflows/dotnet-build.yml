@@ -13,13 +13,36 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
     inputs:
-      myInput:
-        description: "My test input value"
-        default: "my input value"
+      DEBUG_WORKFLOW:
+        description: 'Flag to display more information if debugging workflow'
+        required: false
+        type: boolean
+        default: false
+      VERSION_MAJOR:
+        description: 'Version (major)'
+        required: false
+        type: number
+        default: 1
+      VERSION_MINOR:
+        description: 'Version (minor)'
+        required: false
+        type: number
+        default: 0
+      VERSION_BUILD:
+        description: 'Version (build)'
+        required: false
+        type: number
+        default: 0
+      BUILD_CONFIGURATION:
+        description: "Build configuration"
+        required: false
+        type: string
+        default: "Release"
 
 jobs:
   "build":
     runs-on: [self-hosted, Windows, minikube]
+    
     defaults:
       run:
         shell: cmd
@@ -31,10 +54,22 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    
+    - name: Output Run ID
+      run: echo ${{ github.run_id }}
+    - name: Output Run Number
+      run: echo ${{ github.run_number }}
+    - name: Output Run Attempt
+      run: echo ${{ github.run_attempt }}
+    - name: "Add version info to json file"
+      env:
+        BUILD_VERSION: ${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+      run: |
+        echo "version: ${{ env.BUILD_VERSION }}"
     - name: Dump environment variables
       run: set
     - name: Print inputs
-      run: echo "debug_workflow is ${{ inputs.debug_workflow }}"
+      run: echo "debug_workflow is ${{ inputs.DEBUG_WORKFLOW }} or ${{ inputs.debug_workflow }} END"
     - name: Output Inputs
       run: echo "${{ toJSON(github.event.inputs) }}"
     - name: Dump selected variables
