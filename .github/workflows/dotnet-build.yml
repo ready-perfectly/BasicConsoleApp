@@ -36,7 +36,7 @@ jobs:
     - name: Dump environment variables
       run: set
     - name: Print inputs
-      run: echo ${{ inputs.debug_workflow }}
+      run: echo "debug_workflow is ${{ inputs.debug_workflow }}"
     - name: Dump selected variables
       run: |
         echo "GitHub SHA: $GITHUB_SHA"
