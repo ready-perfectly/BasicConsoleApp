@@ -50,7 +50,10 @@ jobs:
 
     steps:
     - name: Print GITHUB_EVENT_NAME
-      run: echo ${{ github.GITHUB_EVENT_NAME }}
+      run: echo "GITHUB_EVENT_NAME is ${{ github.GITHUB_EVENT_NAME }}"
+    - name: Print GITHUB_EVENT_NAME
+      run: echo "OKOK"
+      if: github.GITHUB_EVENT_NAME == 'workflow_dispatch'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
