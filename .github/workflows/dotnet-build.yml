@@ -79,7 +79,6 @@ jobs:
         
     - name: Test actions
       run: |
-        core.warning('Missing semicolon', {file: 'app.js', startLine: 1})
         echo "::warning file=appxxx.js,line=1::Missing semicolon123"
       
     - uses: actions/checkout@v4
