@@ -64,15 +64,15 @@ jobs:
       
     - name: Print if DEBUG_WORKFLOW 
       run: echo "Yeah DEBUG_WORKFLOW is true"
-      if: ${{ env.DEBUG_WORKFLOW }}
+      if: ${{ env.DEBUG_WORKFLOW == true }}
       
     - name: Print if NOT DEBUG_WORKFLOW
       run: echo "Yeah DEBUG_WORKFLOW is FALSE"
-      if: ${{ !env.DEBUG_WORKFLOW }}
+      if: ${{ !env.DEBUG_WORKFLOW == false }}
       
     - name: Print if DEBUG_WORKFLOW
       run: echo "Yeah DEBUG_WORKFLOW is true 2"
-      if: env.DEBUG_WORKFLOW
+      if: env.DEBUG_WORKFLOW == true
       
     - name: Print inputs is NOT null (before)
       run: |
