@@ -6,6 +6,27 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>ReadyPerfectly.BasicConsoleApp</RootNamespace>
+    
+    <!-- 
+    # Set project properties ; these affect the output in DLLs/EXEs properties dialog
+    # The properties in that dialog that we want to set are:  
+    # 1. File description : Set by AssemblyTitle element
+    # 1. File version     : Set by AssemblyVersion element but we will set it at runtime using -p:AssemblyVersion=2.3
+    # 1. Product name     : Set by Product element
+    # 1. Product version  : Set by AssemblyVersion element but we will set it at runtime using -p:Version=4.5
+    # 1. Copyright        : Set by Copyright element
+    
+    Note: We want to set IncludeSourceRevisionInInformationalVersion to false (defaults to true)
+    This affects the output of Product version.
+    If its true, product version will have a SHA hash like:
+    4.5+3fb9a2aaa92837f46e9f73bf578a2730474f4845
+    If its false, product version will like:
+    4.5+3fb9a2aaa92837f46e9f73bf578a2730474f4845
+    -->
+    <AssemblyTitle>Basic Console Application</AssemblyTitle>
+    <Product>BasicConsoleApp</Product>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Copyright>Ong Zhi Xian</Copyright>
   </PropertyGroup>
 
 </Project>
