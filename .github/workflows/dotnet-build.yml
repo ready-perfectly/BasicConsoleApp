@@ -84,7 +84,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} --nologo
+      run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} --nologo -p:AssemblyVersion=${{ env.MY_BUILD_VERSION }}
     - name: Test
       run: dotnet test --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --nologo --verbosity normal
     - name: Post-build
