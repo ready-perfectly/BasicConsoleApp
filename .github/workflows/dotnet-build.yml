@@ -58,7 +58,7 @@ jobs:
     steps:
     - name: Print job environment variables
       run: |
-        echo BUILD_VERSION     : ${{ env.BUILD_VERSION }}
+        echo BUILD_VERSION        : ${{ env.BUILD_VERSION }}
         echo BUILD_CONFIGURATION  : ${{ env.BUILD_CONFIGURATION }}
         echo DEBUG_WORKFLOW       : ${{ env.DEBUG_WORKFLOW }}
         echo ARTIFACT_NAME        : ${{ env.ARTIFACT_NAME }}
