@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: basic-console-app
+  name: basic-console-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: basic-console-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: basic-console-app
+    spec:
+      containers:
+      - image: docker.io/library/basic-console-app:0.0.0.1
+        name: basic-console-app
+        resources: {}
+status: {}
