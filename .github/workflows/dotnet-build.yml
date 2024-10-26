@@ -80,6 +80,14 @@ jobs:
     - name: Test actions
       run: |
         echo "::warning file=appxxx.js,line=1::Missing semicolon123"
+
+    - name: Test actions 2
+      run: |
+        ::warning "file2=appxxx.js,line=1::Missing semicolon123"
+        
+    - name: Test actions 3
+      run: |
+        warning "file3=appxxx.js,line=1::Missing semicolon123"
       
     - uses: actions/checkout@v4
     - name: Setup .NET
