@@ -77,14 +77,10 @@ jobs:
         echo SAMPLE_ORG_SECRET1     : ${{ secrets.SAMPLE_ORG_SECRET1 }}
         echo SAMPLE_ORG_SECRET2     : ${{ secrets.SAMPLE_ORG_SECRET2 }}
         
-    - name: Output Inputs
+    - name: Test actions
       run: |
-        echo GITHUB
-        echo "${{ toJSON(github) }}"
-        echo INPUTS
-        echo "${{ toJSON(inputs) }}"
-        echo ENV
-        echo "${{ toJSON(env) }}"
+        core.warning('Missing semicolon', {file: 'app.js', startLine: 1})
+        echo "::warning file=appxxx.js,line=1::Missing semicolon123"
       
     - uses: actions/checkout@v4
     - name: Setup .NET
