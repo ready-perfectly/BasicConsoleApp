@@ -122,5 +122,7 @@ jobs:
     
     steps:
       - name: Do something
+        env:
+          OUTPUT1: ${{needs.Build.outputs.ARTIFACT_ARCHIVE_NAME}}
         run: |
-          echo do something: ${{needs.Build.outputs.ARTIFACT_ARCHIVE_NAME}}"
+          echo do something: $OUTPUT1"
