@@ -43,7 +43,8 @@ env:
   MY_BUILD_VERSION: "${{ inputs.VERSION_MAJOR || vars.BUILD_VERSION_MAJOR }}.${{ inputs.VERSION_MINOR || vars.BUILD_VERSION_MINOR }}.${{ inputs.VERSION_BUILD || github.run_number }}.${{ github.run_attempt }}"
   BUILD_CONFIGURATION: "${{ inputs.BUILD_CONFIGURATION || 'Release' }}"
   DEBUG_WORKFLOW: "${{ inputs.DEBUG_WORKFLOW || false }}"
-  ARTIFACT_ARCHIVE_NAME: "ConsoleApp-${{ BUILD_CONFIGURATION }}-${{ MY_BUILD_VERSION }}.zip"
+  ARTIFACT_NAME: "ConsoleApp"
+  
   
 jobs:
   "build":
@@ -60,6 +61,7 @@ jobs:
         echo MY_BUILD_VERSION     : ${{ env.MY_BUILD_VERSION }}
         echo BUILD_CONFIGURATION  : ${{ env.BUILD_CONFIGURATION }}
         echo DEBUG_WORKFLOW       : ${{ env.DEBUG_WORKFLOW }}
+        echo ARTIFACT_NAME        : ${{ env.ARTIFACT_NAME }}
         
     - name: Print debug information (DEBUG_WORKFLOW is ${{ env.DEBUG_WORKFLOW }}) 
       if: env.DEBUG_WORKFLOW == true
@@ -91,14 +93,17 @@ jobs:
     - name: Publish
       run: dotnet publish --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts
     - name: Archive
+      with:
+        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
       run: |
         dir
         pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./${{ env.ARTIFACT_ARCHIVE_NAME }}" -Force
-    - name: Upload dotnet test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
-        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
+#    - name: Upload dotnet test results
+#      uses: actions/upload-artifact@v4
+#      with:
+#        ARTIFACT_ARCHIVE_NAME: "${{ env.ARTIFACT_NAME }}-${{ env.BUILD_CONFIGURATION }}-${{ env.MY_BUILD_VERSION }}.zip"
+#        name: ${{ env.ARTIFACT_ARCHIVE_NAME }}
+#        path: "./${{ env.ARTIFACT_ARCHIVE_NAME }}"    
     
     - name: Post-build
       run: |
