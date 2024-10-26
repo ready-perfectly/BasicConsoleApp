@@ -53,7 +53,10 @@ jobs:
       run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END"
     - name: Print GITHUB_EVENT_NAME
       run: echo "OKOK"
-      if: github.GITHUB_EVENT_NAME == 'workflow_dispatch'
+      if: github.event_name == 'workflow_dispatch'
+    - name: Print GITHUB_EVENT_NAME
+      run: echo "OKOK IS PULL REQUEST"
+      if: github.event_name == 'pull_request'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
