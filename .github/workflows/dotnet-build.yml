@@ -54,6 +54,10 @@ jobs:
     steps:
     - name: Print GITHUB_EVENT_NAME
       run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END"
+      
+    - name: Print inputs is null
+      run: echo "Yeah inputs is null"
+      if: inputs == null
 
     - name: Print config vars
       run: |
