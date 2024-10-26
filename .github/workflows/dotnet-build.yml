@@ -38,7 +38,10 @@ on:
         required: false
         type: string
         default: "Release"
-
+        
+env:
+  MY_BUILD_VERSION: ${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  
 jobs:
   "build":
     runs-on: [self-hosted, Windows, minikube]
