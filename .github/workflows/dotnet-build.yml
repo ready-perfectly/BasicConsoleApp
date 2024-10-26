@@ -60,12 +60,12 @@ jobs:
         echo BUILD_CONFIGURATION  : ${{ env.BUILD_CONFIGURATION }}
         echo DEBUG_WORKFLOW       : ${{ env.DEBUG_WORKFLOW }}
         
-    - name: (${{ env.DEBUG_WORKFLOW }}) Print debug information 
+    - name: Print debug information (DEBUG_WORKFLOW is ${{ env.DEBUG_WORKFLOW }}) 
       if: env.DEBUG_WORKFLOW == true
       run: |
         echo GITHUB_EVENT_NAME      : ${{ github.event_name }}
       
-    - name: Print configuration variables
+    - name: Print configuration variables (DEBUG_WORKFLOW is ${{ env.DEBUG_WORKFLOW }})
       if: env.DEBUG_WORKFLOW == true
       run: |
         echo SAMPLE_ORG_VARIABLE1   : ${{ vars.SAMPLE_ORG_VARIABLE1 }}
