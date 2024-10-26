@@ -58,6 +58,10 @@ jobs:
     - name: Print inputs is null
       run: echo "Yeah inputs is null"
       if: inputs == null
+      
+    - name: Print inputs is NOT null
+      run: echo "Yeah inputs is NOT null"
+      if: inputs != null
 
     - name: Print config vars
       run: |
