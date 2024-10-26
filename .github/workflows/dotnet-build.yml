@@ -61,6 +61,7 @@ jobs:
         echo "SAMPLE_REPO_VARIABLE1 : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
         echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 }}"
         echo "SAMPLE_ORG_SECRET1    : ${{ vars.SAMPLE_ORG_SECRET1 }}"
+        echo "SAMPLE_ORG_SECRET2    : ${{ vars.SAMPLE_ORG_SECRET2 }}"
       
     - name: Print GITHUB_EVENT_NAME
       run: echo "OKOK"
