@@ -82,11 +82,18 @@ jobs:
       with:
         dotnet-version: 8.0.x      
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --artifacts-path ./artifacts
     - name: Build
-      run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} --nologo -p:AssemblyVersion=${{ env.MY_BUILD_VERSION }}
+      run: dotnet build --nologo --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} -p:AssemblyVersion=${{ env.MY_BUILD_VERSION }} --artifacts-path ./artifacts
     - name: Test
-      run: dotnet test --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --nologo --verbosity normal
+      run: dotnet test --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts 
+    - name: Publish
+      run: dotnet publish --nologo --no-restore --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --artifacts-path ./artifacts
+      
+    - name: Archive
+      run: |
+        ls -l
+        pwsh.exe -NoLogo -NoProfile -WorkingDirectory ${{ github.workspace }} -Command Compress-Archive "./artifacts/publish/BasicConsoleApp/${{ env.BUILD_CONFIGURATION }}" "./ConsoleApp-${{ env.MY_BUILD_VERSION }}-${{ env.BUILD_CONFIGURATION }}.zip"
     - name: Post-build
       run: |
         set
