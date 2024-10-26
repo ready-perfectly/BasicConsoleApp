@@ -53,51 +53,29 @@ jobs:
         shell: cmd
         working-directory: ${{ github.workspace }}
 
-
     steps:
-    - name: Print GITHUB_EVENT_NAME
-      run: echo "GITHUB_EVENT_NAME is ${{ github.event_name }} or ${{ env.GITHUB_EVENT_NAME }} END -- ${{ env.MY_BUILD_VERSION }}"
-      
-    - name: Print inputs is null
-      run: echo "Yeah inputs is null"
-      if: inputs == null
-      
-    - name: Print if DEBUG_WORKFLOW 
-      run: echo "Yeah DEBUG_WORKFLOW is true"
-      if: ${{ env.DEBUG_WORKFLOW == true }}
-      
-    - name: Print if NOT DEBUG_WORKFLOW
-      run: echo "Yeah DEBUG_WORKFLOW is FALSE"
-      if: ${{ !env.DEBUG_WORKFLOW == false }}
-      
-    - name: Print if DEBUG_WORKFLOW
-      run: echo "Yeah DEBUG_WORKFLOW is true 2"
-      if: env.DEBUG_WORKFLOW == true
-      
-    - name: Print inputs is NOT null (before)
+    - name: Print job environment variables
       run: |
-        echo "Yeah inputs is NOT null"
-        echo "DEBUG_WORKFLOW      : ${{ inputs.DEBUG_WORKFLOW }}"
-        echo "VERSION_MAJOR       : ${{ inputs.VERSION_MAJOR }}"
-        echo "VERSION_MINOR       : ${{ inputs.VERSION_MINOR }}"
-        echo "VERSION_BUILD       : ${{ inputs.VERSION_BUILD }}"
-        echo "BUILD_CONFIGURATION : ${{ inputs.BUILD_CONFIGURATION }}"
-      if: inputs != null
-
+        echo "MY_BUILD_VERSION    : ${{ env.MY_BUILD_VERSION }}"
+        echo "BUILD_CONFIGURATION : ${{ env.BUILD_CONFIGURATION }}"
+        echo "DEBUG_WORKFLOW      : ${{ env.DEBUG_WORKFLOW }}"
+        
+    - name: Print debug information 
+      if: env.DEBUG_WORKFLOW == true
+      run: |
+        echo "GITHUB_EVENT_NAME : ${{ github.event_name }}"
+        echo "SAMPLE_ORG_VARIABLE1  : ${{ vars.SAMPLE_ORG_VARIABLE1 }}"
+        echo "SAMPLE_REPO_VARIABLE1 : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
+        echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 }}"
+      
     - name: Print config vars
       run: |
         echo "SAMPLE_ORG_VARIABLE1  : ${{ vars.SAMPLE_ORG_VARIABLE1 }}"
         echo "SAMPLE_REPO_VARIABLE1 : ${{ vars.SAMPLE_REPO_VARIABLE1 }}"
-        echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 }}"
-        echo "SAMPLE_ORG_SECRET1    : ${{ vars.SAMPLE_ORG_SECRET1 }}"
-        echo "SAMPLE_ORG_SECRET2    : ${{ vars.SAMPLE_ORG_SECRET2 }}"
+        echo "SAMPLE_REPO_SECRET1   : ${{ vars.SAMPLE_REPO_SECRET1 == null }}"
+        echo "SAMPLE_ORG_SECRET1    : ${{ vars.SAMPLE_ORG_SECRET1 == null }}"
+        echo "SAMPLE_ORG_SECRET2    : ${{ vars.SAMPLE_ORG_SECRET2 == null }}"
       
-    - name: Print GITHUB_EVENT_NAME
-      run: echo "OKOK"
-      if: github.event_name == 'workflow_dispatch'
-    - name: Print GITHUB_EVENT_NAME
-      run: echo "OKOK IS PULL REQUEST"
-      if: github.event_name == 'pull_request'
     - uses: actions/checkout@v4
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
